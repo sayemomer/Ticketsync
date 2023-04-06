@@ -8,6 +8,7 @@ package main;
 
 import main.RMmodel.Message;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.*;
 import java.rmi.registry.LocateRegistry;
@@ -296,47 +297,45 @@ public class RM1 {
 
     //Send RMI request to server
     private static String requestToServers(Message input) throws Exception {
-//        int portNumber = serverPort(input.userID.substring(0, 3));
-//        Registry registry = LocateRegistry.getRegistry(portNumber);
-//        EventManagementInterface obj = (EventManagementInterface) registry.lookup("ServerClass");
-//
-//        if (input.userID.substring(3, 4).equalsIgnoreCase("M")) {
-//            if (input.Function.equalsIgnoreCase("addEvent")) {
-//                String response = obj.addEvent(input.newEventID, input.newEventType, input.bookingCapacity);
-//                System.out.println(response);
-//                return response;
-//            } else if (input.Function.equalsIgnoreCase("removeEvent")) {
-//                String response = obj.removeEvent(input.newEventID, input.newEventType);
-//                System.out.println(response);
-//                return response;
-//            } else if (input.Function.equalsIgnoreCase("listEventAvailability")) {
-//                String response = obj.listEventAvailability(input.newEventType);
-//                System.out.println(response);
-//                return response;
-//            }
-//        } else if (input.userID.substring(3, 4).equalsIgnoreCase("C")) {
-//            if (input.Function.equalsIgnoreCase("bookEvent")) {
-//                String response = obj.bookEvent(input.userID, input.newEventID, input.newEventType);
-//                System.out.println(response);
-//                return response;
-//            } else if (input.Function.equalsIgnoreCase("getBookingSchedule")) {
-//                String response = obj.getBookingSchedule(input.userID);
-//                System.out.println(response);
-//                return response;
-//            } else if (input.Function.equalsIgnoreCase("cancelEvent")) {
-//                String response = obj.cancelEvent(input.userID, input.newEventID, input.newEventType);
-//                System.out.println(response);
-//                return response;
-//            } else if (input.Function.equalsIgnoreCase("swapEvent")) {
-//                String response = obj.swapEvent(input.userID, input.newEventID, input.newEventType, input.oldEventID, input.oldEventType);
-//                System.out.println(response);
-//                return response;
-//            }
-//        }
-//        return "Null response from server" + input.userID.substring(0, 3);
+        String serverName = input.userID.substring(0, 3);
+        System.out.println(input.userID.substring(0, 3));
+        int port = 0;
 
-        return "sending executed request from rm to front";
+        if(serverName.equalsIgnoreCase("ATW")) {
+            port = 8889;
+        } else if(serverName.equalsIgnoreCase("OUT")) {
+            port = 7779;
+        } else if(serverName.equalsIgnoreCase("VER")) {
+            port = 6669;
+        }
+
+        DatagramSocket aSocket = null;
+
+        try {
+            aSocket = new DatagramSocket();
+            byte[] m = input.toString().getBytes();
+            InetAddress aHost = InetAddress.getByName("localhost");
+            DatagramPacket request = new DatagramPacket(m, m.length, aHost, port);
+            aSocket.send(request);
+            System.out.println("RM1 sending request to server:" + input.newEventID + ' ' + input.newEventType + ' ' + input.bookingCapacity + ' ' + port);
+
+            byte[] buffer = new byte[1000];
+            DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+            aSocket.receive(reply);
+            String response = new String(reply.getData());
+            System.out.println("RM1 received response from server:" + response);
+            return response;
+        } catch (SocketException e) {
+            System.out.println("Socket: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IO: " + e.getMessage());
+        } finally {
+            if (aSocket != null)
+                aSocket.close();
+        }
+        return "Null response from server" + input.userID.substring(0, 3);
     }
+
 
     private static int serverPort(String input) {
         String branch = input.substring(0, 3);
