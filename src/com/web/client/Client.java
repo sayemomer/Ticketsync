@@ -1,12 +1,12 @@
 package com.web.client;
 
-
+import com.web.frontendController.FEInterface;
+import com.web.frontendController.implementation.Frontend;
 import com.web.staticType.Types;
 import com.web.helper.Helper;
 
 //import Logger.Logger;
 import Model.MovieModel;
-import com.web.webcontroller.ControllerInterface;
 
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
@@ -22,23 +22,15 @@ public class Client {
     public static final String MOVIE_MANAGEMENT_REGISTERED_NAME = "MOVIE_MANAGEMENT";
 
     static Scanner input;
-    public static Service atwaterService;
-    public static Service verdunService;
-    public static Service outramontService;
-    private static ControllerInterface obj;
+    public static Service frontendService;
+//    public static Service verdunService;
+//    public static Service outramontService;
+    private static FEInterface obj;
 
     public static void main(String[] args) throws Exception {
-        URL atwaterURL = new URL("http://localhost:8080/atwater?wsdl");
-        QName atwaterlQName = new QName("http://implementation.webcontroller.web.com/", "MovieManagementService");
-        atwaterService = Service.create(atwaterURL, atwaterlQName);
-
-        URL verdunURL = new URL("http://localhost:8080/verdun?wsdl");
-        QName verdunQName = new QName("http://implementation.webcontroller.web.com/", "MovieManagementService");
-        verdunService = Service.create(verdunURL, verdunQName);
-
-        URL outramontURL = new URL("http://localhost:8080/outramont?wsdl");
-        QName outramontQName = new QName("http://implementation.webcontroller.web.com/", "MovieManagementService");
-        outramontService = Service.create(outramontURL, outramontQName);
+        URL frontendURL = new URL("http://localhost:8080/frontend?wsdl");
+        QName frontendQName = new QName("http://implementation.frontendController.web.com/", "FrontendService");
+        frontendService = Service.create(frontendURL, frontendQName);
         init();
     }
 
@@ -69,18 +61,19 @@ public class Client {
     }
 
     private static String getServerID(String userID) {
-        String branchAcronym = userID.substring(0, 3);
-        if (branchAcronym.equalsIgnoreCase("ATW")) {
-            obj = atwaterService.getPort(ControllerInterface.class);
-            return branchAcronym;
-        } else if (branchAcronym.equalsIgnoreCase("VER")) {
-            obj = verdunService.getPort(ControllerInterface.class);
-            return branchAcronym;
-        } else if (branchAcronym.equalsIgnoreCase("OUT")) {
-            obj = outramontService.getPort(ControllerInterface.class);
-            return branchAcronym;
-        }
-        return "1";
+//        String branchAcronym = userID.substring(0, 3);
+//        if (branchAcronym.equalsIgnoreCase("ATW")) {
+//            obj = atwaterService.getPort(ControllerInterface.class);
+//            return branchAcronym;
+//        } else if (branchAcronym.equalsIgnoreCase("VER")) {
+//            obj = verdunService.getPort(ControllerInterface.class);
+//            return branchAcronym;
+//        } else if (branchAcronym.equalsIgnoreCase("OUT")) {
+//            obj = outramontService.getPort(ControllerInterface.class);
+//            return branchAcronym;
+//        }
+        obj = frontendService.getPort(FEInterface.class);
+        return userID;
     }
 
     private static void customer(String customerID) throws Exception {
@@ -159,7 +152,7 @@ public class Client {
                 movieID = promptForMovieID();
                 capacity = Helper.promptForCapacity(input);
                // Logger.clientLog(eventManagerID, " attempting to addEvent");
-                serverResponse = obj.addMovie(movieID, movieType, capacity);
+                serverResponse = obj.addMovie(serverID,movieID, movieType, capacity);
                 System.out.println(serverResponse);
                 //Logger.clientLog(eventManagerID, " addEvent", " eventID: " + eventID + " eventType: " + eventType + " eventCapacity: " + capacity + " ", serverResponse);
                 break;
@@ -167,14 +160,14 @@ public class Client {
                 movieType = promptForMovieType();
                 movieID = promptForMovieID();
                 //Logger.clientLog(eventManagerID, " attempting to removeEvent");
-                serverResponse = obj.removeMovie(movieID, movieType);
+                serverResponse = obj.removeMovie(serverID,movieID, movieType);
                 System.out.println(serverResponse);
                 //Logger.clientLog(eventManagerID, " removeEvent", " eventID: " + eventID + " eventType: " + eventType + " ", serverResponse);
                 break;
             case Types.ADMIN_LIST_MOVIE_AVAILABILITY:
                 movieType = promptForMovieType();
                 //Logger.clientLog(eventManagerID, " attempting to listEventAvailability");
-                serverResponse = obj.listMovieAvailability(movieType);
+                serverResponse = obj.listMovieAvailability(serverID,movieType);
                 System.out.println(serverResponse);
                 //Logger.clientLog(eventManagerID, " listEventAvailability", " eventType: " + eventType + " ", serverResponse);
                 break;

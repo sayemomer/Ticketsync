@@ -3,6 +3,7 @@ package com.web.webcontroller.implementation;
 //import DataModel.EventModel;
 //import Logger.Logger;
 
+import FrontEnd.MyRequest;
 import Model.ClientModel;
 import Model.MovieModel;
 import com.web.webcontroller.ControllerInterface;
@@ -64,7 +65,7 @@ public class MovieManagement  implements ControllerInterface {
     }
 
     @Override
-    public String addMovie(String movieID, String movieType, int bookingCapacity) {
+    public String addMovie(String managerID, String movieID, String movieType, int bookingCapacity) {
         String response;
         if (isEventOfThisServer(movieID)) {
             if (showExists(movieType, movieID)) {
@@ -111,7 +112,7 @@ public class MovieManagement  implements ControllerInterface {
     }
 
     @Override
-    public String removeMovie(String movieID, String movieType) {
+    public String removeMovie(String managerID ,String movieID, String movieType) {
         String response;
         if (isEventOfThisServer(movieID)) {
             if (showExists(movieType, movieID)) {
@@ -146,7 +147,7 @@ public class MovieManagement  implements ControllerInterface {
     }
 
     @Override
-    public String listMovieAvailability(String movieType) {
+    public String listMovieAvailability(String managerID,String movieType) {
         String response;
         Map<String, MovieModel> movies = allMovies.get(movieType);
         StringBuilder builder = new StringBuilder();
