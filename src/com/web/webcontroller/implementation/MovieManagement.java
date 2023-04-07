@@ -21,9 +21,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-@WebService(endpointInterface = "com.web.webcontroller.ControllerInterface")
-
-@SOAPBinding(style = SOAPBinding.Style.RPC)
 public class MovieManagement  implements ControllerInterface {
 
     private String serverID;

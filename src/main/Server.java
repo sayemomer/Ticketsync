@@ -51,17 +51,14 @@ public class Server {
                 case "ATW":
                     serverName = MovieManagement.MOVIE_SERVER_ATWATER;
                     serverUdpPort = MovieManagement.Atwater_Server_Port;
-                    serverEndpoint = "http://localhost:8080/atwater";
                     break;
                 case "VER":
                     serverName = MovieManagement.MOVIE_SERVER_VERDUN;
                     serverUdpPort = MovieManagement.Verdun_Server_Port;
-                    serverEndpoint = "http://localhost:8080/verdun";
                     break;
                 case "OUT":
                     serverName = MovieManagement.MOVIE_SERVER_OUTRAMONT;
                     serverUdpPort = MovieManagement.Outramont_Server_Port;
-                    serverEndpoint = "http://localhost:8080/outramont";
                     break;
             }
             try {
@@ -70,17 +67,24 @@ public class Server {
 
                 MovieManagement service = new MovieManagement(serverID, serverName);
 
-                Endpoint endpoint = Endpoint.publish(serverEndpoint, service);
+
+//                Endpoint endpoint = Endpoint.publish(serverEndpoint, service);
 
                 System.out.println(serverName + " Server is Up & Running");
                 //Logger.serverLog(serverID, " Server is Up & Running");
 
 //            addTestData(server);
-            Runnable task = () -> {
+                Runnable task = () -> {
+                    receive(service, serverUdpPort, serverName, serverID);
+                };
+                Thread thread1 = new Thread(task);
+                thread1.start();
+
+                Runnable task2 = () -> {
                 listenForRequest(service, serverUdpPort, serverName, serverID);
             };
-            Thread thread = new Thread(task);
-            thread.start();
+            Thread thread2 = new Thread(task);
+            thread2.start();
 
             } catch (Exception e) {
 //            System.err.println("Exception: " + e);
@@ -92,6 +96,45 @@ public class Server {
 //        Logger.serverLog(serverID, " Server Shutting down");
 
         }
+
+
+        //TODO: write the receive method which will receive the request from the RM and send the response back to the RM
+
+        private static void receive(MovieManagement obj, int serverUdpPort, String serverName, String serverID) {
+            DatagramSocket aSocket = null;
+            String sendingResult = "";
+
+            try {
+                aSocket = new DatagramSocket(serverUdpPort);
+                byte[] buffer = new byte[1000];
+                System.out.println(serverName + " UDP Server Started at port " + aSocket.getLocalPort() + " ............");
+                while (true){
+                    DatagramPacket request = new DatagramPacket(buffer, buffer.length);
+                    aSocket.receive(request);
+                    String sentence = new String(request.getData(), 0,
+                            request.getLength());
+                    String[] parts = sentence.split(";");
+                    String method = parts[0];
+                    String customerID = parts[1];
+                    String eventType = parts[2];
+                    String eventID = parts[3];
+                    if (method.equalsIgnoreCase("addMovie")) {
+                        String result = obj.removeMovieUDP(eventID, eventType, customerID);
+                        sendingResult = result + ";";
+                    }
+                    DatagramPacket reply = new DatagramPacket(sendingResult.getBytes(), sendingResult.length(), request.getAddress(), request.getPort());
+                    aSocket.send(reply);
+                }
+            } catch (SocketException e) {
+                System.out.println("Socket: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("IO: " + e.getMessage());
+            } finally {
+                if (aSocket != null)
+                    aSocket.close();
+            }
+        }
+
 
         private static void listenForRequest(MovieManagement obj, int serverUdpPort, String serverName, String serverID) {
             DatagramSocket aSocket = null;
