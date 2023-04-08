@@ -302,11 +302,11 @@ public class RM1 {
         int port = 0;
 
         if(serverName.equalsIgnoreCase("ATW")) {
-            port = 8889;
+            port = 8888;
         } else if(serverName.equalsIgnoreCase("OUT")) {
-            port = 7779;
+            port = 7777;
         } else if(serverName.equalsIgnoreCase("VER")) {
-            port = 6669;
+            port = 6666;
         }
 
         DatagramSocket aSocket = null;
@@ -317,7 +317,7 @@ public class RM1 {
             InetAddress aHost = InetAddress.getByName("localhost");
             DatagramPacket request = new DatagramPacket(m, m.length, aHost, port);
             aSocket.send(request);
-            System.out.println("RM1 sending request to server:" + input.newEventID + ' ' + input.newEventType + ' ' + input.bookingCapacity + ' ' + port);
+            System.out.println("RM1 sending request to server:" + ' ' + port);
 
             byte[] buffer = new byte[1000];
             DatagramPacket reply = new DatagramPacket(buffer, buffer.length);

@@ -12,9 +12,9 @@ public class MovieModel {
     public static final String MOVIE_TIME_AFTERNOON = "Afternoon";
     public static final String MOVIE_TIME_EVENING = "Evening";
 
-    public static final String AVATAR = "Avatar";
-    public static final String AVENGER = "Avenger";
-    public static final String TITANIC = "Titanic";
+    public static final String AVATAR = "AVATAR";
+    public static final String AVENGER = "AVENGER";
+    public static final String TITANIC = "TITANIC";
 
     public static final int EVENT_FULL = -1;
     public static final int ALREADY_REGISTERED = 0;
