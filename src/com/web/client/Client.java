@@ -7,7 +7,6 @@ import com.web.helper.Helper;
 
 //import Logger.Logger;
 import Model.MovieModel;
-
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import java.net.URL;

@@ -1,4 +1,4 @@
-package main;
+package RM1;
 
 //import Replica1.DataBase.Message;
 //import Replica1.Server.Montreal;
@@ -6,13 +6,10 @@ package main;
 //import Replica1.Server.Sherbrooke;
 //import Replica1.ServerInterface.EventManagementInterface;
 
-import main.RMmodel.Message;
+import RM1.RMmodel.Message;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.*;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;

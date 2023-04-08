@@ -1,4 +1,4 @@
-package main.RMmodel;
+package RM1.RMmodel;
 
 public class Message {
     public String FrontIpAddress,Function , MessageType, userID, newEventID, newEventType, oldEventID, oldEventType;

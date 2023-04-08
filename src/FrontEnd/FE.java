@@ -51,9 +51,8 @@ public class FE {
     public static int sendUnicastToSequencer(MyRequest requestFromClient) {
         DatagramSocket aSocket = null;
         String dataFromClient = requestFromClient.toString();
-        System.out.println("FE:sendUnicastToSequencer>>>" + dataFromClient);
 
-        System.out.println("FE:sendUnicastToSequencer>>>.........");
+        System.out.println("FE sendUnicastToSequencer ->>>>" + dataFromClient);
 
         int sequenceID = 0;
         try {
@@ -72,9 +71,8 @@ public class FE {
             aSocket.receive(response);
             String sentence = new String(response.getData(), 0,
                     response.getLength());
-            System.out.println("FE:sendUnicastToSequencer/ResponseFromSequencer>>>" + sentence);
             sequenceID = Integer.parseInt(sentence.trim());
-            System.out.println("FE:sendUnicastToSequencer/ResponseFromSequencer>>>SequenceID:" + sequenceID);
+            System.out.println("FE:sendUnicastToSequencer/ResponseFromSequencer->>>SequenceID:" + sequenceID);
         } catch (SocketException e) {
             System.out.println("Failed: " + requestFromClient.noRequestSendError());
             System.out.println("Socket: " + e.getMessage());

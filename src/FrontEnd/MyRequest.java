@@ -4,9 +4,9 @@ package FrontEnd;
 public class MyRequest {
     private String function = "null";
     private String clientID = "null";
-    private String eventType = "null";
+    private String movieType = "null";
     private String OldEventType = "null";
-    private String eventID = "null";
+    private String movieID = "null";
     private String OldEventID = "null";
     private String FeIpAddress = FE.FE_IP_Address;
     private int bookingCapacity = 0;
@@ -39,12 +39,12 @@ public class MyRequest {
         this.clientID = clientID;
     }
 
-    public String getEventType() {
-        return eventType;
+    public String getMovieType() {
+        return movieType;
     }
 
-    public void setMovieType(String eventType) {
-        this.eventType = eventType;
+    public void setMovieType(String movieType) {
+        this.movieType = movieType;
     }
 
     public String getOldEventType() {
@@ -55,12 +55,12 @@ public class MyRequest {
         this.OldEventType = OldEventType;
     }
 
-    public String getEventID() {
-        return eventID;
+    public String getMovieID() {
+        return movieID;
     }
 
-    public void setMovieID(String eventID) {
-        this.eventID = eventID;
+    public void setMovieID(String movieID) {
+        this.movieID = movieID;
     }
 
     public String getOldEventID() {
@@ -123,8 +123,8 @@ public class MyRequest {
                 getMessageType().toUpperCase() + ";" +
                 getFunction().toUpperCase() + ";" +
                 getClientID().toUpperCase() + ";" +
-                getEventID().toUpperCase() + ";" +
-                getEventType().toUpperCase() + ";" +
+                getMovieID().toUpperCase() + ";" +
+                getMovieType().toUpperCase() + ";" +
                 getOldEventID().toUpperCase() + ";" +
                 getOldEventType().toUpperCase() + ";" +
                 getBookingCapacity();
