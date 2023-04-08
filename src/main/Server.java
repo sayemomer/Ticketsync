@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.sql.Struct;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -42,8 +43,10 @@ public class Server {
 
         private String serverID;
         private String serverName;
-        private String serverEndpoint;
+
         private int serverUdpPort;
+
+        private int internalUdpPort ;
 
         public ServerInstance(String serverID, String[] args) throws Exception {
             this.serverID = serverID;
@@ -51,17 +54,17 @@ public class Server {
                 case "ATW":
                     serverName = MovieManagement.MOVIE_SERVER_ATWATER;
                     serverUdpPort = MovieManagement.Atwater_Server_Port;
-                    serverEndpoint = "http://localhost:8080/atwater";
+                    internalUdpPort = MovieManagement.Atwater_Server_internal_udp_port;
                     break;
                 case "VER":
                     serverName = MovieManagement.MOVIE_SERVER_VERDUN;
                     serverUdpPort = MovieManagement.Verdun_Server_Port;
-                    serverEndpoint = "http://localhost:8080/verdun";
+                    internalUdpPort = MovieManagement.Verdun_Server_internal_udp_port;
                     break;
                 case "OUT":
                     serverName = MovieManagement.MOVIE_SERVER_OUTRAMONT;
                     serverUdpPort = MovieManagement.Outramont_Server_Port;
-                    serverEndpoint = "http://localhost:8080/outramont";
+                    internalUdpPort = MovieManagement.Outramont_Server_internal_udp_port;
                     break;
             }
             try {
@@ -70,17 +73,24 @@ public class Server {
 
                 MovieManagement service = new MovieManagement(serverID, serverName);
 
-                Endpoint endpoint = Endpoint.publish(serverEndpoint, service);
+
+//                Endpoint endpoint = Endpoint.publish(serverEndpoint, service);
 
                 System.out.println(serverName + " Server is Up & Running");
                 //Logger.serverLog(serverID, " Server is Up & Running");
 
 //            addTestData(server);
-            Runnable task = () -> {
-                listenForRequest(service, serverUdpPort, serverName, serverID);
-            };
-            Thread thread = new Thread(task);
-            thread.start();
+                Runnable task = () -> {
+                    receive(service, serverUdpPort, serverName, serverID);
+                };
+                Thread thread1 = new Thread(task);
+                thread1.start();
+
+                Runnable task2 = () -> {
+                listenForRequest(service, internalUdpPort, serverName, serverID);
+                };
+                Thread thread2 = new Thread(task2);
+                thread2.start();
 
             } catch (Exception e) {
 //            System.err.println("Exception: " + e);
@@ -93,13 +103,62 @@ public class Server {
 
         }
 
+
+        //TODO: write the receive method which will receive the request from the RM and send the response back to the RM
+
+        private static void receive(MovieManagement obj, int serverUdpPort, String serverName, String serverID) {
+            DatagramSocket aSocket = null;
+            String sendingResult = "";
+
+            try {
+                aSocket = new DatagramSocket(serverUdpPort);
+                byte[] buffer = new byte[1000];
+                System.out.println(serverName + "UDP Server Started at port " + aSocket.getLocalPort() + " ............");
+                while (true){
+                    DatagramPacket request = new DatagramPacket(buffer, buffer.length);
+                    aSocket.receive(request);
+                    String sentence = new String(request.getData(), 0,
+                            request.getLength());
+                    System.out.println(sentence);
+                    String[] parts = sentence.split(";");
+//                    String method = parts[0];
+//                    String customerID = parts[1];
+//                    String eventType = parts[2];
+//                    String eventID = parts[3];
+                    String function = parts[3];
+                    String managerID = parts[4];
+                    String movieID = parts[5];
+                    String movieType = parts[6];
+                    int bookingCapacity= Integer.parseInt(parts[0]);
+
+                    System.out.println(function +' ' +managerID+' '+movieID+' '+movieType+' '+bookingCapacity);
+                    if (function.equalsIgnoreCase("addMovie")) {
+                        //System.out.println("UDP request received in server " + method + " eventID: " + eventID + " eventType: " + eventType + " ...");
+
+                          String result =  obj.addMovie(managerID, movieID, movieType, bookingCapacity);
+                          sendingResult = result + ";";
+                    }
+                    DatagramPacket reply = new DatagramPacket(sendingResult.getBytes(), sendingResult.length(), request.getAddress(), request.getPort());
+                    aSocket.send(reply);
+                }
+            } catch (SocketException e) {
+                System.out.println("Socket: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("IO: " + e.getMessage());
+            } finally {
+                if (aSocket != null)
+                    aSocket.close();
+            }
+        }
+
+
         private static void listenForRequest(MovieManagement obj, int serverUdpPort, String serverName, String serverID) {
             DatagramSocket aSocket = null;
             String sendingResult = "";
             try {
                 aSocket = new DatagramSocket(serverUdpPort);
                 byte[] buffer = new byte[1000];
-                System.out.println(serverName + " UDP Server Started at port " + aSocket.getLocalPort() + " ............");
+                System.out.println(serverName +' '+ "Internal UDP Server Started at port " + aSocket.getLocalPort() + " ............");
                 //Logger.serverLog(serverID, " UDP Server Started at port " + aSocket.getLocalPort());
                 while (true) {
                     DatagramPacket request = new DatagramPacket(buffer, buffer.length);

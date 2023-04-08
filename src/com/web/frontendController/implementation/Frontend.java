@@ -46,13 +46,18 @@ public class Frontend implements FEInterface {
     @Override
     public synchronized String  addMovie(String managerID, String movieID, String movieType, int bookingCapacity) {
 
-        System.out.println("in frontend adding movie...");
         MyRequest myRequest = new MyRequest("addMovie", managerID);
         myRequest.setMovieID(movieID);
         myRequest.setMovieType(movieType);
         myRequest.setBookingCapacity(bookingCapacity);
         myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
-        System.out.println("FE Implementation:addEvent>>>" + myRequest.toString());
+
+        System.out.println("Message Format: Sequence_id;FrontIpAddress;Message_Type;function(addMovie,...);userID; newMovieID;newMovieType; oldMovieID; oldMovieType;bookingCapacity");
+
+        //Message format 0;LOCALHOST;00;ADDMOVIE;ATWA2345;ATWM190120;AVATAR;NULL;NULL;1
+        System.out.println("inside FE Implementation:addEvent..." + myRequest.toString());
+
+        //TODO: validate responses
 //        return validateResponses(myRequest);
 
         String result = "getting result from RMs......";
@@ -155,6 +160,8 @@ public class Frontend implements FEInterface {
     }
 
     private String validateResponses(MyRequest myRequest) {
+
+        //TODO: validate responses from RMs to check the mejority
 //        String resp;
 //        switch ((int) latch.getCount()) {
 //            case 0:
@@ -183,6 +190,8 @@ public class Frontend implements FEInterface {
     }
 
     private String findMajorityResponse(MyRequest myRequest) {
+
+        //TODO: find the majority response from RMs and if the majority is not found then retry the request
 //        RmResponse res1 = null;
 //        RmResponse res2 = null;
 //        RmResponse res3 = null;
@@ -283,6 +292,8 @@ public class Frontend implements FEInterface {
 //        return "Fail: majority response not found";
 //    }
 //
+
+       //TODO: if the majority is not found then retry the request
 //    private void rmBugFound(int rmNumber) {
 //        switch (rmNumber) {
 //            case 1:

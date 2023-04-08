@@ -21,9 +21,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-@WebService(endpointInterface = "com.web.webcontroller.ControllerInterface")
-
-@SOAPBinding(style = SOAPBinding.Style.RPC)
 public class MovieManagement  implements ControllerInterface {
 
     private String serverID;
@@ -32,6 +29,12 @@ public class MovieManagement  implements ControllerInterface {
     public static final int Atwater_Server_Port = 8888;
     public static final int Verdun_Server_Port = 7777;
     public static final int Outramont_Server_Port = 6666;
+
+    public static final int Atwater_Server_internal_udp_port = 8889;
+
+    public static final int Verdun_Server_internal_udp_port = 7778;
+
+    public static final int Outramont_Server_internal_udp_port = 6667;
     public static final String MOVIE_SERVER_ATWATER = "Atwater";
     public static final String MOVIE_SERVER_VERDUN = "Verdun";
     public static final String MOVIE_SERVER_OUTRAMONT = "Outramont";
@@ -671,6 +674,8 @@ public class MovieManagement  implements ControllerInterface {
     }
 
     private synchronized boolean showExists(String movieType, String movieID) {
+
+        System.out.println(movieType+' ' +movieID);
         return allMovies.get(movieType).containsKey(movieID);
     }
 
