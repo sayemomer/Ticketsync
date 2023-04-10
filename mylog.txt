@@ -1,0 +1,14 @@
+Apr 09, 2023 11:38:02 PM RM2.BookingImpl addMovieSlots
+INFO: Movie slot added: movieName=Avatar, movieID=ATWM090423, bookingCapacity=100
+Apr 09, 2023 11:38:52 PM RM2.BookingImpl addMovieSlots
+INFO: Movie slot added: movieName=Titanic, movieID=ATWM100423, bookingCapacity=200
+Apr 09, 2023 11:39:58 PM RM2.BookingImpl bookMovieTickets
+INFO: Tickets booked for customer ATWA1234: 11 tickets booked successfully for Avatar
+Apr 09, 2023 11:41:03 PM RM2.BookingImpl bookMovieTickets
+INFO: Tickets booked for customer ATWA1234: 11 tickets booked successfully for Titanic
+Apr 09, 2023 11:41:03 PM RM2.BookingImpl cancelMovieTickets
+INFO: Total book tickets of customer: 11
+Apr 09, 2023 11:41:03 PM RM2.BookingImpl cancelMovieTickets
+INFO: Remaining Tickets: 0
+Apr 09, 2023 11:41:03 PM RM2.BookingImpl exchangeTickets
+INFO: exchange of tickets are done successfully
