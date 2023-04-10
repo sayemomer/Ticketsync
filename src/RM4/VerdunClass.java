@@ -1,4 +1,3 @@
-package RM4;
 import java.rmi.*;
 
 import java.rmi.server.*;
@@ -20,9 +19,9 @@ import javax.swing.ButtonGroup;
 
 import javax.swing.JOptionPane;
 
-
-
-
+import RM4.Booking;
+import RM4.Movie;
+import RM4.RemoteInterface;
 
 import java.io.*;
 import java.net.DatagramPacket;

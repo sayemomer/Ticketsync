@@ -19,7 +19,7 @@ import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 
 
-import RM4.VerdunClass.;
+import static RM4.VerdunClass.movieSlots;
 
 
 

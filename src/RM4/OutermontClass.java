@@ -19,9 +19,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import org.omg.CORBA.ORB;
 
-import com.web.service.RemoteInterface;
 
-import ServerInterfaceApp.ServerInterfacePOA;
 
 import java.io.*;
 import java.net.DatagramPacket;

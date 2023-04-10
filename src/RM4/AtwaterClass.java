@@ -1,4 +1,6 @@
-package RM4;
+package src.RM4;
+
+
 
 import java.text.DateFormat;
 
@@ -16,7 +18,9 @@ import javax.swing.ButtonGroup;
 
 import javax.swing.JOptionPane;
 
-
+import RM4.Booking;
+import RM4.Movie;
+import RM4.RemoteInterface;
 
 import java.io.*;
 import java.net.DatagramPacket;

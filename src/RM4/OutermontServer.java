@@ -18,13 +18,8 @@ import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 
-import com.web.service.impl.OutermontClass;
 
-import ServerInterfaceApp.ServerInterface;
-import ServerInterfaceApp.ServerInterfaceHelper;
-import com.web.service.impl.*;
-
-import static com.web.service.impl.OutermontClass.movieSlots;
+import static RM4.OutermontClass.movieSlots;
 
 
 
