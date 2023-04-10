@@ -1,14 +1,6 @@
 package RM1;
 
-//import Replica1.DataBase.Message;
-//import Replica1.Server.Montreal;
-//import Replica1.Server.Quebec;
-//import Replica1.Server.Sherbrooke;
-//import Replica1.ServerInterface.EventManagementInterface;
-
 import RM1.RMmodel.Message;
-
-import javax.swing.plaf.synth.SynthLookAndFeel;
 import java.io.IOException;
 import java.net.*;
 import java.util.Iterator;

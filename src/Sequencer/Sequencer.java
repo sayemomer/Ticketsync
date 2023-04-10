@@ -40,7 +40,7 @@ public class Sequencer {
                         parts[8] + ";" +
                         parts[9] + ";";
 
-                sequencerId = sequencerId1;
+//                sequencerId = sequencerId1;
                 System.out.println(sentence1);
                 sendMessage(sentence1, sequencerId1, parts[2].equalsIgnoreCase("00"));
 

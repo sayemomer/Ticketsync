@@ -9,7 +9,7 @@ public class CommonOutput {
     public static final String addEvent_fail_cannot_decrease_capacity = "Cannot decrease capacity";
     public static final String addMovie_success_added = "Movie added successfully";
     public static final String addEvent_success_capacity_updated = "Movie updated successfully";
-    public static final String removeEvent_fail_no_such_event = "No such show";
+    public static final String removeMovie_fail_no_such_show = "No such show";
     public static final String bookEvent_fail_no_such_event = "No such show";
     public static final String bookEvent_fail_no_capacity = "show is full";
     public static final String bookEvent_fail_weekly_limit = "Weekly limit reached";
@@ -65,7 +65,7 @@ public class CommonOutput {
         return standardOutput(isSuccess, "listMovieAvailability", reason);
     }
 
-    public static String removeEventOutput(boolean isSuccess, String reason) {
+    public static String removeMovieOutput(boolean isSuccess, String reason) {
         if (isSuccess) {
             reason = general_success;
         } else {

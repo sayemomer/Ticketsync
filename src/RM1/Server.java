@@ -136,6 +136,11 @@ public class Server {
 
                           String result =  obj.addMovie(managerID, movieID, movieType, bookingCapacity);
                           response = result;
+                    } else if (function.equalsIgnoreCase("removeMovie")) {
+
+                        String result = obj.removeMovie(managerID, movieID,movieType);
+                        response = result;
+
                     }
                     DatagramPacket reply = new DatagramPacket(response.getBytes(), response.length(), request.getAddress(), request.getPort());
                     aSocket.send(reply);

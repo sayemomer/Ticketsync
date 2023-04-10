@@ -135,9 +135,11 @@ public class MovieManagement  implements ControllerInterface {
 //                try {
 //                    Logger.serverLog(serverID, "null", " CORBA removeEvent ", " eventID: " + eventID + " eventType: " + eventType + " ", response);
 //                } catch (IOException e) {
+//                } catch (IOException e) {
 //                    e.printStackTrace();
 //                }
-                return response;
+//                }
+                return CommonOutput.removeMovieOutput(false, CommonOutput.removeMovie_fail_no_such_show);
             }
         } else {
             response = "Failed: Cannot Remove Event from servers other than " + serverName;

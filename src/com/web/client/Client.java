@@ -1,7 +1,6 @@
 package com.web.client;
 
 import com.web.frontendController.FEInterface;
-import com.web.frontendController.implementation.Frontend;
 import com.web.staticType.Types;
 import com.web.helper.Helper;
 
@@ -15,15 +14,8 @@ import java.util.Scanner;
 
 public class Client {
 
-    public static final int SERVER_ATWATER = 2964;
-    public static final int SERVER_VERDUN = 2965;
-    public static final int SERVER_OUTRAMONT = 2966;
-    public static final String MOVIE_MANAGEMENT_REGISTERED_NAME = "MOVIE_MANAGEMENT";
-
     static Scanner input;
     public static Service frontendService;
-//    public static Service verdunService;
-//    public static Service outramontService;
     private static FEInterface obj;
 
     public static void main(String[] args) throws Exception {
@@ -60,17 +52,6 @@ public class Client {
     }
 
     private static String getServerID(String userID) {
-//        String branchAcronym = userID.substring(0, 3);
-//        if (branchAcronym.equalsIgnoreCase("ATW")) {
-//            obj = atwaterService.getPort(ControllerInterface.class);
-//            return branchAcronym;
-//        } else if (branchAcronym.equalsIgnoreCase("VER")) {
-//            obj = verdunService.getPort(ControllerInterface.class);
-//            return branchAcronym;
-//        } else if (branchAcronym.equalsIgnoreCase("OUT")) {
-//            obj = outramontService.getPort(ControllerInterface.class);
-//            return branchAcronym;
-//        }
         obj = frontendService.getPort(FEInterface.class);
         return userID;
     }

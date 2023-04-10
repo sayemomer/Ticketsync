@@ -60,16 +60,15 @@ public class Frontend implements FEInterface {
     }
 
     @Override
-    public synchronized String removeMovie(String managerID, String eventID, String eventType) {
+    public synchronized String removeMovie(String managerID, String movieID, String movieType) {
 
         System.out.println("in frontend removing movie...");
-//        MyRequest myRequest = new MyRequest("removeEvent", managerID);
-//        myRequest.setEventID(eventID);
-//        myRequest.setEventType(eventType);
-//        myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
-//        System.out.println("FE Implementation:removeEvent>>>" + myRequest.toString());
-//        return validateResponses(myRequest);
-        return "movie removed";
+        MyRequest myRequest = new MyRequest("removeMovie", managerID);
+        myRequest.setMovieID(movieID);
+        myRequest.setMovieType(movieType);
+        myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
+        System.out.println("FE Implementation:removeEvent>>>" + myRequest.toString());
+        return validateResponses(myRequest);
     }
 
     @Override
