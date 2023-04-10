@@ -1,4 +1,4 @@
-package main;
+package RM1;
 
 import com.web.webcontroller.implementation.MovieManagement;
 
