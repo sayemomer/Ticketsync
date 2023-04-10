@@ -84,28 +84,25 @@ public class Frontend implements FEInterface {
     }
 
     @Override
-    public synchronized String bookMovie(String customerID, String eventID, String eventType) {
+    public synchronized String bookMovie(String customerID, String movieID, String movieType) {
 
         System.out.println("in frontend booking movie...");
-//        MyRequest myRequest = new MyRequest("bookEvent", customerID);
-//        myRequest.setEventID(eventID);
-//        myRequest.setEventType(eventType);
-//        myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
-//        System.out.println("FE Implementation:bookEvent>>>" + myRequest.toString());
-//        return validateResponses(myRequest);
-
-        return "movie booked";
+        MyRequest myRequest = new MyRequest("bookMovie", customerID);
+        myRequest.setMovieID(movieID);
+        myRequest.setMovieType(movieType);
+        myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
+        System.out.println("FE Implementation:bookEvent>>>" + myRequest.toString());
+        return validateResponses(myRequest);
     }
 
     @Override
     public synchronized String getBookingSchedule(String customerID) {
 
         System.out.println("in frontend getting booking schedule...");
-//        MyRequest myRequest = new MyRequest("getBookingSchedule", customerID);
-//        myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
-//        System.out.println("FE Implementation:getBookingSchedule>>>" + myRequest.toString());
-//        return validateResponses(myRequest);
-        return "booking schedule";
+        MyRequest myRequest = new MyRequest("getBookingSchedule", customerID);
+        myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
+        System.out.println("FE Implementation:getBookingSchedule>>>" + myRequest.toString());
+        return validateResponses(myRequest);
     }
 
     @Override

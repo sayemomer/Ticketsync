@@ -76,7 +76,7 @@ public class CommonOutput {
         return standardOutput(isSuccess, "removeMovie", reason);
     }
 
-    public static String bookEventOutput(boolean isSuccess, String reason) {
+    public static String bookMovieOutput(boolean isSuccess, String reason) {
         if (isSuccess) {
             reason = general_success;
         } else {

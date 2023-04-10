@@ -141,7 +141,15 @@ public class Server {
                         String result = obj.removeMovie(managerID, movieID,movieType);
                         response = result;
 
+                    } else if (function.equalsIgnoreCase("bookMovie")) {
+                        String result = obj.bookMovie(managerID, movieID, movieType);
+                        response = result;
                     }
+                    else if (function.equalsIgnoreCase("getBookingSchedule")){
+                        String result = obj.getBookingSchedule(managerID);
+                        response =result;
+                    }
+
                     DatagramPacket reply = new DatagramPacket(response.getBytes(), response.length(), request.getAddress(), request.getPort());
                     aSocket.send(reply);
                 }

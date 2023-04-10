@@ -16,10 +16,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MovieManagement  implements ControllerInterface {
@@ -227,7 +224,13 @@ public class MovieManagement  implements ControllerInterface {
                         addCustomerAndMovie(customerID, movieType, movieID);
                 }
                 if (allMovies.get(movieType).get(movieID).addRegisteredClientID(customerID) == MovieModel.ADD_SUCCESS) {
-                    response = "Success: Movie " + movieID + " Booked Successfully";
+
+
+//                    response = "Success: Movie " + movieID + " Booked Successfully";
+
+                    response = CommonOutput.bookMovieOutput(true, null);
+
+
                 } else if (allMovies.get(movieType).get(movieID).addRegisteredClientID(customerID) == MovieModel.EVENT_FULL) {
                     response = "Failed: Event " + movieID + " is Full";
                 } else {
@@ -297,7 +300,7 @@ public class MovieManagement  implements ControllerInterface {
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
-            return response;
+            return CommonOutput.getBookingScheduleOutput(true, new HashMap<>(), null);
         }
         Map<String, List<String>> movies = clientEvents.get(customerID);
         if (movies.size() == 0) {
@@ -307,7 +310,7 @@ public class MovieManagement  implements ControllerInterface {
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
-            return response;
+            return CommonOutput.getBookingScheduleOutput(true, movies, null);
         }
         StringBuilder builder = new StringBuilder();
         for (String movieType :
@@ -325,7 +328,7 @@ public class MovieManagement  implements ControllerInterface {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        return response;
+        return CommonOutput.getBookingScheduleOutput(true, movies, null);
     }
 
     @Override
