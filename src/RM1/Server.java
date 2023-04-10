@@ -148,6 +148,9 @@ public class Server {
                     else if (function.equalsIgnoreCase("getBookingSchedule")){
                         String result = obj.getBookingSchedule(managerID);
                         response =result;
+                    } else if (function.equalsIgnoreCase("cancelBooking")) {
+                        String result = obj.cancelMovie(managerID, movieID, movieType);
+                        response = result;
                     }
 
                     DatagramPacket reply = new DatagramPacket(response.getBytes(), response.length(), request.getAddress(), request.getPort());

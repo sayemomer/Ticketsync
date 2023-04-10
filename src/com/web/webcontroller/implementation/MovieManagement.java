@@ -343,7 +343,7 @@ public class MovieManagement  implements ControllerInterface {
 //                    } catch (IOException e) {
 //                        e.printStackTrace();
 //                    }
-                    return response;
+                    return CommonOutput.cancelEventOutput(false, CommonOutput.cancelEvent_fail_not_registered_in_event);
                 } else {
                     if (removeMovieIfExists(customerID, movieType, movieID)) {
                         allMovies.get(movieType).get(movieID).removeRegisteredClientID(customerID);
@@ -353,7 +353,7 @@ public class MovieManagement  implements ControllerInterface {
 //                        } catch (IOException e) {
 //                            e.printStackTrace();
 //                        }
-                        return response;
+                        return CommonOutput.cancelEventOutput(true, null);
                     } else {
                         response = "Failed: You " + customerID + " Are Not Registered in " + movieID;
 //                        try {
@@ -361,7 +361,7 @@ public class MovieManagement  implements ControllerInterface {
 //                        } catch (IOException e) {
 //                            e.printStackTrace();
 //                        }
-                        return response;
+                        return CommonOutput.cancelEventOutput(false, CommonOutput.cancelEvent_fail_not_registered_in_event);
                     }
                 }
             } else {
@@ -372,7 +372,7 @@ public class MovieManagement  implements ControllerInterface {
 //                    } catch (IOException e) {
 //                        e.printStackTrace();
 //                    }
-                    return response;
+                    return CommonOutput.cancelEventOutput(true, null);
                 } else {
                     response = "Failed: You " + customerID + " Are Not Registered in " + movieID;
 //                    try {
@@ -380,7 +380,7 @@ public class MovieManagement  implements ControllerInterface {
 //                    } catch (IOException e) {
 //                        e.printStackTrace();
 //                    }
-                    return response;
+                    return CommonOutput.cancelEventOutput(false, CommonOutput.cancelEvent_fail_not_registered_in_event);
                 }
             }
         } else {
@@ -403,7 +403,7 @@ public class MovieManagement  implements ControllerInterface {
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
-            return response;
+            return CommonOutput.cancelEventOutput(false, CommonOutput.cancelEvent_fail_not_registered_in_event);
         }
     }
 

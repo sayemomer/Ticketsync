@@ -106,17 +106,15 @@ public class Frontend implements FEInterface {
     }
 
     @Override
-    public synchronized String cancelMovie(String customerID, String eventID, String eventType) {
+    public synchronized String cancelMovie(String customerID, String movieID, String movieType) {
 
         System.out.println("in frontend cancelling movie...");
-//        MyRequest myRequest = new MyRequest("cancelEvent", customerID);
-//        myRequest.setEventID(eventID);
-//        myRequest.setEventType(eventType);
-//        myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
-//        System.out.println("FE Implementation:cancelEvent>>>" + myRequest.toString());
-//        return validateResponses(myRequest);
-        System.out.println("cancelling movie.....");
-        return "movie cancelled";
+        MyRequest myRequest = new MyRequest("cancelBooking", customerID);
+        myRequest.setMovieID(movieID);
+        myRequest.setMovieType(movieType);
+        myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
+        System.out.println("FE Implementation:cancelEvent>>>" + myRequest.toString());
+        return validateResponses(myRequest);
     }
 
     @Override
