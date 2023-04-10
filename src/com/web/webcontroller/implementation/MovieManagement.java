@@ -7,6 +7,7 @@ import FrontEnd.MyRequest;
 import Model.ClientModel;
 import Model.MovieModel;
 import com.web.webcontroller.ControllerInterface;
+import RM1.CommonOutput;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
@@ -101,7 +102,7 @@ public class MovieManagement  implements ControllerInterface {
 //                } catch (IOException e) {
 //                    e.printStackTrace();
 //                }
-                return response;
+                return CommonOutput.addMovieOutput(true, CommonOutput.addMovie_success_added);
             }
         } else {
             response = "Failed: Cannot Add Show to servers other than " + serverName;

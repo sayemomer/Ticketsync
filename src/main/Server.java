@@ -108,8 +108,7 @@ public class Server {
 
         private static void receive(MovieManagement obj, int serverUdpPort, String serverName, String serverID) {
             DatagramSocket aSocket = null;
-            String sendingResult = "";
-
+            String response = "";
             try {
                 aSocket = new DatagramSocket(serverUdpPort);
                 byte[] buffer = new byte[1000];
@@ -136,9 +135,9 @@ public class Server {
                         //System.out.println("UDP request received in server " + method + " eventID: " + eventID + " eventType: " + eventType + " ...");
 
                           String result =  obj.addMovie(managerID, movieID, movieType, bookingCapacity);
-                          sendingResult = result + ";";
+                          response = result;
                     }
-                    DatagramPacket reply = new DatagramPacket(sendingResult.getBytes(), sendingResult.length(), request.getAddress(), request.getPort());
+                    DatagramPacket reply = new DatagramPacket(response.getBytes(), response.length(), request.getAddress(), request.getPort());
                     aSocket.send(reply);
                 }
             } catch (SocketException e) {

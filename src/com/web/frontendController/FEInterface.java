@@ -15,7 +15,8 @@ public interface FEInterface {
 
     int sendRequestToSequencer(MyRequest myRequest);
 
-    void retryRequest(MyRequest myRequest);
+    //TODO : Change it according
+    String retryRequest(MyRequest myRequest);
 
 
     public String addMovie(String managerID ,String movieID, String movieType, int bookingCapacity);

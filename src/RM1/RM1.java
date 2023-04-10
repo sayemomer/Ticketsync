@@ -8,6 +8,7 @@ package RM1;
 
 import RM1.RMmodel.Message;
 
+import javax.swing.plaf.synth.SynthLookAndFeel;
 import java.io.IOException;
 import java.net.*;
 import java.util.Iterator;
@@ -80,6 +81,7 @@ public class RM1 {
                 socket.receive(request);
 
                 String data = new String(request.getData(), 0, request.getLength());
+
                 String[] parts = data.split(";");
 
                 /*
@@ -97,6 +99,7 @@ public class RM1 {
                 System.out.println("RM1 recieved message. Detail:" + data);
                 if (parts[2].equalsIgnoreCase("00")) {
                     Message message = message_obj_create(data);
+
                     if (!message.userID.equalsIgnoreCase(Crash_ID)) {
                         Message message_To_RMs = message_obj_create(data);
                         message_To_RMs.MessageType = "01";
@@ -134,6 +137,8 @@ public class RM1 {
                         try {
 
                             System.out.println("RM1 is going to shutdown");
+
+                            //TODO: shutdown all servers
 //                            //suspend the execution of messages untill all servers are up. (serversFlag=false)
 //                            serversFlag = false;
 //                            //reboot Monteal Server
@@ -275,11 +280,23 @@ public class RM1 {
                         } else {
                             System.out.println("RM1 is executing message request. Detail:" + data);
                             String response = requestToServers(data);
-                            Message message = new Message(data.sequenceId, response, "RM1",
-                                    data.Function, data.userID, data.newEventID,
-                                    data.newEventType, data.oldEventID,
-                                    data.oldEventType, data.bookingCapacity);
+
+                            System.out.println(data.toString());
+
+                            Message message = new Message(
+                                    data.sequenceId,
+                                    response,
+                                    "RM1",
+                                    data.Function,
+                                    data.userID,
+                                    data.newEventID,
+                                    data.newEventType,
+                                    data.oldEventID,
+                                    data.oldEventType,
+                                    data.bookingCapacity);
                             lastSequenceID += 1;
+
+                            System.out.println(message.toString());
                             messsageToFront(message.toString(), data.FrontIpAddress);
                             message_q.poll();
                         }
@@ -319,8 +336,10 @@ public class RM1 {
             byte[] buffer = new byte[1000];
             DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
             aSocket.receive(reply);
-            String response = new String(reply.getData());
-            System.out.println("RM1 received response from server:" + response);
+
+            String response = new String(reply.getData(), 0,
+                    reply.getLength());
+            System.out.println("RM1 received response from server: " + response);
             return response;
         } catch (SocketException e) {
             System.out.println("Socket: " + e.getMessage());
