@@ -64,6 +64,10 @@ public class FE {
             InetAddress aHost = InetAddress.getByName(sequencerIP);
             DatagramPacket requestToSequencer = new DatagramPacket(message, dataFromClient.length(), aHost, sequencerPort);
 
+            System.out.println("hiuhihoihoihih" + dataFromClient);
+
+
+
             aSocket.send(requestToSequencer);
 
             aSocket.setSoTimeout(1000);
@@ -138,6 +142,8 @@ public class FE {
 //                String[] parts = sentence.split(";");
 
                 System.out.println("Adding response to FrontEndImplementation:");
+
+                System.out.println("heeeeeee"+rmResponse.toString());
                 service.addReceivedResponse(rmResponse);
 //                DatagramPacket reply = new DatagramPacket(response.getData(), response.getLength(), response.getAddress(),
 //                        response.getPort());

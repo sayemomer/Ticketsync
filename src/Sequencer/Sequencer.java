@@ -28,7 +28,10 @@ public class Sequencer {
 
                 String[] parts = sentence.split(";");
                 int sequencerId1 = Integer.parseInt(parts[0]);
-                String ip = request.getAddress().getHostAddress();
+//                String ip = request.getAddress().getHostAddress();
+                String ip = parts[1];
+
+                System.out.println("baaaal"+ parts[1]);
 
                 String sentence1 = ip + ";" +
                         parts[2] + ";" +

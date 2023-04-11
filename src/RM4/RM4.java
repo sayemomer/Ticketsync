@@ -1,6 +1,7 @@
-package RM1;
+package RM4;
 
-import RM1.RMmodel.Message;
+import RM4.RMmodel.Message;
+
 import java.io.IOException;
 import java.net.*;
 import java.util.Iterator;
@@ -8,7 +9,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class RM1 {
+public class RM4 {
     private static final String Bug_ID = "MTLM8888";
     private static final String Crash_ID = "MTLM9999";
     public static int lastSequenceID = 1;
@@ -251,7 +252,7 @@ public class RM1 {
     private static void executeAllRequests() throws Exception {
         System.out.println("before while true");
         while (true) {
-            synchronized (RM1.class) {
+            synchronized (RM4.class) {
                 Iterator<Message> itr = message_q.iterator();
                 while (itr.hasNext()) {
                     Message data = itr.next();
