@@ -60,6 +60,8 @@ public class RmResponse {
             this.rmNumber = 2;
         } else if (rmNumber.equalsIgnoreCase("RM3")) {
             this.rmNumber = 3;
+        } else if (rmNumber.equalsIgnoreCase("RM4")) {
+            this.rmNumber = 4;
         } else {
             this.rmNumber = 0;
         }

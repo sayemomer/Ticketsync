@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static FrontEnd.FE.ANSI_RESET;
 import static FrontEnd.FE.sendUnicastToSequencer;
 
 
@@ -20,13 +21,21 @@ import static FrontEnd.FE.sendUnicastToSequencer;
 @SOAPBinding(style = SOAPBinding.Style.RPC)
 
 public class Frontend implements FEInterface {
+    public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
+    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+
+    public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
     private static long DYNAMIC_TIMEOUT = 10000;
     private static int Rm1BugCount = 0;
     private static int Rm2BugCount = 0;
     private static int Rm3BugCount = 0;
+
+    private static int Rm4BugCount = 0;
     private static int Rm1NoResponseCount = 0;
     private static int Rm2NoResponseCount = 0;
     private static int Rm3NoResponseCount = 0;
+
+    private static int Rm4NoResponseCount = 0;
     private final String serverID;
     private final String serverName;
     private long responseTime = DYNAMIC_TIMEOUT;
@@ -52,29 +61,25 @@ public class Frontend implements FEInterface {
         myRequest.setBookingCapacity(bookingCapacity);
         myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
 
-        System.out.println("Message Format: Sequence_id;FrontIpAddress;Message_Type;function(addMovie,...);userID; newMovieID;newMovieType; oldMovieID; oldMovieType;bookingCapacity");
-
         //Message format 0;LOCALHOST;00;ADDMOVIE;ATWA2345;ATWM190120;AVATAR;NULL;NULL;1
-        System.out.println("inside FE Implementation:addEvent..." + myRequest.toString());
+        System.out.println("inside FE Implementation:addEvent ---> " + myRequest.toString());
         return validateResponses(myRequest);
     }
 
     @Override
     public synchronized String removeMovie(String managerID, String movieID, String movieType) {
 
-        System.out.println("in frontend removing movie...");
         MyRequest myRequest = new MyRequest("removeMovie", managerID);
         myRequest.setMovieID(movieID);
         myRequest.setMovieType(movieType);
         myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
-        System.out.println("FE Implementation:removeEvent>>>" + myRequest.toString());
+        System.out.println("FE Implementation:removeEvent ---> " + myRequest.toString());
         return validateResponses(myRequest);
     }
 
     @Override
     public synchronized String listMovieAvailability(String managerID, String eventType) {
 
-        System.out.println("in frontend listing movies...");
 //        MyRequest myRequest = new MyRequest("listEventAvailability", managerID);
 //        myRequest.setEventType(eventType);
 //        myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
@@ -86,34 +91,31 @@ public class Frontend implements FEInterface {
     @Override
     public synchronized String bookMovie(String customerID, String movieID, String movieType) {
 
-        System.out.println("in frontend booking movie...");
         MyRequest myRequest = new MyRequest("bookMovie", customerID);
         myRequest.setMovieID(movieID);
         myRequest.setMovieType(movieType);
         myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
-        System.out.println("FE Implementation:bookEvent>>>" + myRequest.toString());
+        System.out.println("FE Implementation:bookEvent ---> " + myRequest.toString());
         return validateResponses(myRequest);
     }
 
     @Override
     public synchronized String getBookingSchedule(String customerID) {
 
-        System.out.println("in frontend getting booking schedule...");
         MyRequest myRequest = new MyRequest("getBookingSchedule", customerID);
         myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
-        System.out.println("FE Implementation:getBookingSchedule>>>" + myRequest.toString());
+        System.out.println("FE Implementation:getBookingSchedule ---> " + myRequest.toString());
         return validateResponses(myRequest);
     }
 
     @Override
     public synchronized String cancelMovie(String customerID, String movieID, String movieType) {
 
-        System.out.println("in frontend cancelling movie...");
         MyRequest myRequest = new MyRequest("cancelBooking", customerID);
         myRequest.setMovieID(movieID);
         myRequest.setMovieType(movieType);
         myRequest.setSequenceNumber(sendUdpUnicastToSequencer(myRequest));
-        System.out.println("FE Implementation:cancelEvent>>>" + myRequest.toString());
+        System.out.println("FE Implementation:cancelEvent ---> " + myRequest.toString());
         return validateResponses(myRequest);
     }
 
@@ -135,16 +137,14 @@ public class Frontend implements FEInterface {
 
     public void waitForResponse() {
         try {
-            System.out.println("FE Implementation:waitForResponse>>>ResponsesRemain" + latch.getCount());
+            System.out.println(ANSI_BLUE_BACKGROUND +"waiting For Response.... ResponsesRemain" + ANSI_RESET + latch.getCount());
             boolean timeoutReached = latch.await(DYNAMIC_TIMEOUT, TimeUnit.MILLISECONDS);
             if (timeoutReached) {
                 setDynamicTimout();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
-//            inter.sendRequestToSequencer(myRequest);
         }
-//         check result and react correspondingly
     }
 
     private String validateResponses(MyRequest myRequest) {
@@ -153,11 +153,12 @@ public class Frontend implements FEInterface {
             case 0:
             case 1:
             case 2:
+            case 3:
                 resp = findMajorityResponse(myRequest);
                 break;
-            case 3:
+            case 4:
                 resp = "Fail: No response from any server";
-                System.out.println(resp);
+                System.out.println(ANSI_RED_BACKGROUND + resp + ANSI_RESET);
                 if (myRequest.haveRetries()) {
                     myRequest.countRetry();
 //                    resp = retryRequest(myRequest);
@@ -171,7 +172,7 @@ public class Frontend implements FEInterface {
                 resp = "Fail: " + myRequest.noRequestSendError();
                 break;
         }
-        System.out.println("FE Implementation:validateResponses>>>Responses remain:" + latch.getCount() + " >>>Response to be sent to client " + resp);
+        System.out.println(ANSI_GREEN_BACKGROUND +"Frontend validating Responses ::: Responses remain:" +ANSI_RESET+ latch.getCount() + " Response to be sent to client ---> " + resp);
         return resp;
     }
 
@@ -179,6 +180,9 @@ public class Frontend implements FEInterface {
         RmResponse res1 = null;
         RmResponse res2 = null;
         RmResponse res3 = null;
+        RmResponse res4 = null;
+
+        System.out.println(responses.size());
         for (RmResponse response :
                 responses) {
             if (response.getSequenceID() == myRequest.getSequenceNumber()) {
@@ -191,89 +195,137 @@ public class Frontend implements FEInterface {
                         break;
                     case 3:
                         res3 = response;
+                        System.out.println(ANSI_BLUE_BACKGROUND + "RM4 response received" + res3.getResponse() + ANSI_RESET);
+                        break;
+                    case 4:
+                        res4 = response;
                         break;
                 }
             }
         }
-        System.out.println("FE Implementation:findMajorityResponse>>>RM1" + ((res1 != null) ? res1.getResponse() : "null"));
-        System.out.println("FE Implementation:findMajorityResponse>>>RM2" + ((res2 != null) ? res2.getResponse() : "null"));
-        System.out.println("FE Implementation:findMajorityResponse>>>RM3" + ((res3 != null) ? res3.getResponse() : "null"));
+        System.out.println("FE finding Majority Response <--- RM1" + ((res1 != null) ? res1.getResponse() : "null"));
+        System.out.println("FE finding Majority Response <--- RM2" + ((res2 != null) ? res2.getResponse() : "null"));
+        System.out.println("FE finding Majority Response <--- RM3" + ((res3 != null) ? res3.getResponse() : "null"));
+        System.out.println("FE finding Majority Response <--- RM4" + ((res4 != null) ? res4.getResponse() : "null"));
+
         if (res1 == null) {
             rmDown(1);
         } else {
             Rm1NoResponseCount = 0;
-            if (res1.equals(res2)) {
-                if (!res1.equals(res3) && res3 != null) {
-                    rmBugFound(3);
-                }
-                return res2.getResponse();
-            } else if (res1.equals(res3)) {
-                if (!res1.equals(res2) && res2 != null) {
-                    rmBugFound(2);
-                }
-                return res1.getResponse();
-            } else {
-//                if (res2 != null && res2.equals(res3)) {
-                if (res2 == null && res3 == null) {
+            if (res1.equals(res2) && res1.equals(res3)) {
+                if (res1.equals(res4) || res4 == null) {
                     return res1.getResponse();
                 } else {
-//                    rmBugFound(1);
+                    rmBugFound(4);
                 }
-//                    return res2.getResponse();
-//                }
+            } else if (res1.equals(res2) && res1.equals(res4)) {
+                if (res1.equals(res3) || res3 == null) {
+                    return res1.getResponse();
+                } else {
+                    rmBugFound(3);
+                }
+            } else if (res1.equals(res3) && res1.equals(res4)) {
+                if (res1.equals(res2) || res2 == null) {
+                    return res1.getResponse();
+                } else {
+                    rmBugFound(2);
+                }
+            } else if (res2 == null && res3 == null && res4 == null) {
+                return res1.getResponse();
+            } else {
+                rmBugFound(1);
             }
         }
+
         if (res2 == null) {
             rmDown(2);
         } else {
             Rm2NoResponseCount = 0;
-            if (res2.equals(res3)) {
-                if (!res2.equals(res1) && res1 != null) {
-                    rmBugFound(1);
-                }
-                return res2.getResponse();
-            } else if (res2.equals(res1)) {
-                if (!res2.equals(res3) && res3 != null) {
-                    rmBugFound(3);
-                }
-                return res2.getResponse();
-            } else {
-//                if (!res1.equals("null") && res1.equals(res3)) {
-                if (res1 == null && res3 == null) {
+            if (res2.equals(res1) && res2.equals(res3)) {
+                if (res2.equals(res4) || res4 == null) {
                     return res2.getResponse();
                 } else {
-//                    rmBugFound(2);
+                    rmBugFound(4);
                 }
-//                }
-//                return res1;
+            } else if (res2.equals(res1) && res2.equals(res4)) {
+                if (res2.equals(res3) || res3 == null) {
+                    return res2.getResponse();
+                } else {
+                    rmBugFound(3);
+                }
+            } else if (res2.equals(res3) && res2.equals(res4)) {
+                if (res2.equals(res1) || res1 == null) {
+                    return res2.getResponse();
+                } else {
+                    rmBugFound(1);
+                }
+            } else if (res1 == null && res3 == null && res4 == null) {
+                return res2.getResponse();
+            } else {
+                rmBugFound(2);
             }
         }
+
         if (res3 == null) {
             rmDown(3);
         } else {
             Rm3NoResponseCount = 0;
-            if (res3.equals(res2)) {
-                if (!res3.equals(res1) && res1 != null) {
-                    rmBugFound(1);
-                }
-                return res2.getResponse();
-            } else if (res3.equals(res1) && res2 != null) {
-                if (!res3.equals(res2)) {
-                    rmBugFound(2);
-                }
-                return res3.getResponse();
-            } else {
-//                if (!res2.equals("null") && res2.equals(res1)) {
-                if (res1 == null && res2 == null) {
+            if (res3.equals(res1) && res3.equals(res2)) {
+                if (res3.equals(res4) || res4 == null) {
                     return res3.getResponse();
                 } else {
-//                    rmBugFound(3);
+                    rmBugFound(4);
                 }
-//                }
-//                return res1;
+            } else if (res3.equals(res1) && res3.equals(res4)) {
+                if (res3.equals(res2) || res2 == null) {
+                    return res3.getResponse();
+                } else {
+                    rmBugFound(2);
+                }
+            } else if (res3.equals(res2) && res3.equals(res4)) {
+                if (res3.equals(res1) || res1 == null) {
+                    return res3.getResponse();
+                } else {
+                    rmBugFound(1);
+                }
+            } else if (res1 == null && res2 == null && res4 == null) {
+                return res3.getResponse();
+            } else {
+                rmBugFound(3);
             }
         }
-        return "Fail: majority response not found";
+        if (res4 == null) {
+            rmDown(4);
+        } else {
+            Rm4NoResponseCount = 0;
+            if (res4.equals(res1) && res4.equals(res2)) {
+                if (res4.equals(res3) || res3 == null) {
+                    return res4.getResponse();
+                } else {
+                    rmBugFound(3);
+                }
+            } else if (res4.equals(res1) && res4.equals(res3)) {
+                if (res4.equals(res2) || res2 == null) {
+                    return res4.getResponse();
+                } else {
+                    rmBugFound(2);
+                }
+            } else if (res4.equals(res2) && res4.equals(res3)) {
+                if (res4.equals(res1) || res1 == null) {
+                    return res4.getResponse();
+                } else {
+                    rmBugFound(1);
+                }
+            } else if (res1 == null && res2 == null && res3 == null) {
+                return res4.getResponse();
+            } else {
+                rmBugFound(4);
+            }
+        }
+
+
+
+        return "!! Fail: majority response not found";
     }
 
     private void rmBugFound(int rmNumber) {
@@ -300,10 +352,18 @@ public class Frontend implements FEInterface {
                     informRmHasBug(rmNumber);
                 }
                 break;
+            case 4:
+                Rm4BugCount++;
+                if (Rm4BugCount == 3) {
+                    Rm4BugCount = 0;
+                    informRmHasBug(rmNumber);
+                }
+                break;
         }
-        System.out.println("FE Implementation:rmBugFound>>>RM1 - bugs:" + Rm1BugCount);
-        System.out.println("FE Implementation:rmBugFound>>>RM2 - bugs:" + Rm2BugCount);
-        System.out.println("FE Implementation:rmBugFound>>>RM3 - bugs:" + Rm3BugCount);
+        System.out.println("FE rmBugFound on ---> RM1 - bugs:" + Rm1BugCount);
+        System.out.println("FE rmBugFound on ---> RM2 - bugs:" + Rm2BugCount);
+        System.out.println("FE rmBugFound on ---> RM3 - bugs:" + Rm3BugCount);
+        System.out.println("FE rmBugFound on ---> RM4 - bugs:" + Rm4BugCount);
     }
 
     private void rmDown(int rmNumber) {
@@ -331,10 +391,17 @@ public class Frontend implements FEInterface {
                     informRmIsDown(rmNumber);
                 }
                 break;
+            case 4:
+                Rm4NoResponseCount++;
+                if (Rm4NoResponseCount == 3) {
+                    Rm4NoResponseCount = 0;
+                    informRmIsDown(rmNumber);
+                }
         }
-        System.out.println("FE Implementation:rmDown>>>RM1 - noResponse:" + Rm1NoResponseCount);
-        System.out.println("FE Implementation:rmDown>>>RM2 - noResponse:" + Rm2NoResponseCount);
-        System.out.println("FE Implementation:rmDown>>>RM3 - noResponse:" + Rm3NoResponseCount);
+        System.out.println("FE rmDown ---> RM1 - noResponse:" + Rm1NoResponseCount);
+        System.out.println("FE rmDown ---> RM2 - noResponse:" + Rm2NoResponseCount);
+        System.out.println("FE rmDown ---> RM3 - noResponse:" + Rm3NoResponseCount);
+        System.out.println("FE rmDown ---> RM4 - noResponse:" + Rm4NoResponseCount);
 
         return;
     }
@@ -346,12 +413,12 @@ public class Frontend implements FEInterface {
         } else {
             DYNAMIC_TIMEOUT = 10000;
         }
-        System.out.println("FE Implementation:setDynamicTimout>>>" + DYNAMIC_TIMEOUT);
+        System.out.println("Current dynamic Timeout>>>" + DYNAMIC_TIMEOUT);
     }
 
     private void notifyOKCommandReceived() {
         latch.countDown();
-        System.out.println("FE Implementation:notifyOKCommandReceived>>>Response Received: Remaining responses" + latch.getCount());
+        System.out.println("FE Received Response : Remaining responses" + latch.getCount());
     }
 
     public void addReceivedResponse(RmResponse res) {
@@ -366,7 +433,7 @@ public class Frontend implements FEInterface {
         startTime = System.nanoTime();
         int sequenceNumber = sendRequestToSequencer(myRequest);
         myRequest.setSequenceNumber(sequenceNumber);
-        latch = new CountDownLatch(3);
+        latch = new CountDownLatch(4);
         waitForResponse();
         return sequenceNumber;
     }
@@ -374,10 +441,14 @@ public class Frontend implements FEInterface {
     @Override
     public void informRmHasBug(int RmNumber) {
 
+        System.out.println( ANSI_RED_BACKGROUND + "FE is informing RmHasBug>>>RM" + RmNumber + " has a bug" + ANSI_RESET);
+
     }
 
     @Override
     public void informRmIsDown(int RmNumber) {
+
+        System.out.println( ANSI_RED_BACKGROUND + "FE is informing RmIsDown>>>RM" + RmNumber + " is down" + ANSI_RESET);
 
     }
 
@@ -398,7 +469,7 @@ public class Frontend implements FEInterface {
         System.out.println("FE Implementation:retryRequest>>>" + myRequest.toString());
         startTime = System.nanoTime();
         retryRequest(myRequest);
-        latch = new CountDownLatch(3);
+        latch = new CountDownLatch(4);
         waitForResponse();
         return validateResponses(myRequest);
     }

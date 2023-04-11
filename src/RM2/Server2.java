@@ -9,7 +9,7 @@ import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server {
+public class Server2 {
     public static void main(String[] args) {
         ExecutorService executor = Executors.newFixedThreadPool(3);
         executor.submit(new ServerInstanceRunnable("ATW", args));

@@ -9,7 +9,7 @@ import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server {
+public class Server4 {
     public static void main(String[] args) {
         ExecutorService executor = Executors.newFixedThreadPool(3);
         executor.submit(new ServerInstanceRunnable("ATW", args));
@@ -51,18 +51,18 @@ public class Server {
             switch (serverID) {
                 case "ATW":
                     serverName = MovieManagement.MOVIE_SERVER_ATWATER;
-                    serverUdpPort = MovieManagement.Atwater_Server_Port;
-                    internalUdpPort = MovieManagement.Atwater_Server_internal_udp_port;
+                    serverUdpPort = 3217;
+                    internalUdpPort = 3218;
                     break;
                 case "VER":
                     serverName = MovieManagement.MOVIE_SERVER_VERDUN;
-                    serverUdpPort = MovieManagement.Verdun_Server_Port;
-                    internalUdpPort = MovieManagement.Verdun_Server_internal_udp_port;
+                    serverUdpPort = 4217;
+                    internalUdpPort = 4218;
                     break;
                 case "OUT":
                     serverName = MovieManagement.MOVIE_SERVER_OUTRAMONT;
-                    serverUdpPort = MovieManagement.Outramont_Server_Port;
-                    internalUdpPort = MovieManagement.Outramont_Server_internal_udp_port;
+                    serverUdpPort = 6217;
+                    internalUdpPort = 6218;
                     break;
             }
             try {

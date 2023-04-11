@@ -279,7 +279,7 @@ public class RM4 {
                             Message message = new Message(
                                     data.sequenceId,
                                     response,
-                                    "RM1",
+                                    "RM4",
                                     data.Function,
                                     data.userID,
                                     data.newEventID,
@@ -309,11 +309,11 @@ public class RM4 {
         int port = 0;
 
         if(serverName.equalsIgnoreCase("ATW")) {
-            port = 8888;
+            port = 3217;
         } else if(serverName.equalsIgnoreCase("OUT")) {
-            port = 7777;
+            port = 4217;
         } else if(serverName.equalsIgnoreCase("VER")) {
-            port = 6666;
+            port = 6217;
         }
 
         DatagramSocket aSocket = null;
@@ -364,7 +364,7 @@ public class RM4 {
         System.out.println("Message to front:" + message);
         DatagramSocket socket = null;
         try {
-            socket = new DatagramSocket(4321);
+            socket = new DatagramSocket(4324);
             byte[] bytes = message.getBytes();
             InetAddress aHost = InetAddress.getByName(FrontIpAddress);
 
