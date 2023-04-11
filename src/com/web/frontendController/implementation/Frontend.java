@@ -213,27 +213,28 @@ public class Frontend implements FEInterface {
         } else {
             Rm1NoResponseCount = 0;
             if (res1.equals(res2) && res1.equals(res3)) {
-                if (res1.equals(res4) || res4 == null) {
-                    return res1.getResponse();
-                } else {
+                if (!res1.equals(res4) && res4 != null) {
                     rmBugFound(4);
+
                 }
+                return res1.getResponse();
+
             } else if (res1.equals(res2) && res1.equals(res4)) {
-                if (res1.equals(res3) || res3 == null) {
-                    return res1.getResponse();
-                } else {
+                if (!res1.equals(res3) && res3 != null) {
                     rmBugFound(3);
+
                 }
+                return res1.getResponse();
             } else if (res1.equals(res3) && res1.equals(res4)) {
-                if (res1.equals(res2) || res2 == null) {
-                    return res1.getResponse();
-                } else {
+                if (!res1.equals(res2) && res2 != null) {
                     rmBugFound(2);
+
                 }
+                return res1.getResponse();
             } else if (res2 == null && res3 == null && res4 == null) {
                 return res1.getResponse();
             } else {
-                rmBugFound(1);
+//                rmBugFound(1);
             }
         }
 
@@ -242,27 +243,27 @@ public class Frontend implements FEInterface {
         } else {
             Rm2NoResponseCount = 0;
             if (res2.equals(res1) && res2.equals(res3)) {
-                if (res2.equals(res4) || res4 == null) {
-                    return res2.getResponse();
-                } else {
+                if (!res2.equals(res4) && res4 != null) {
                     rmBugFound(4);
+
                 }
+                return res2.getResponse();
             } else if (res2.equals(res1) && res2.equals(res4)) {
-                if (res2.equals(res3) || res3 == null) {
-                    return res2.getResponse();
-                } else {
+                if (!res2.equals(res3) && res3 != null) {
                     rmBugFound(3);
+
                 }
+                return res2.getResponse();
             } else if (res2.equals(res3) && res2.equals(res4)) {
-                if (res2.equals(res1) || res1 == null) {
-                    return res2.getResponse();
-                } else {
+                if (!res2.equals(res1) && res1 != null) {
                     rmBugFound(1);
+
                 }
+                return res2.getResponse();
             } else if (res1 == null && res3 == null && res4 == null) {
                 return res2.getResponse();
             } else {
-                rmBugFound(2);
+//                rmBugFound(2);
             }
         }
 
@@ -271,55 +272,52 @@ public class Frontend implements FEInterface {
         } else {
             Rm3NoResponseCount = 0;
             if (res3.equals(res1) && res3.equals(res2)) {
-                if (res3.equals(res4) || res4 == null) {
-                    return res3.getResponse();
-                } else {
+                if (!res3.equals(res4) && res4 != null) {
                     rmBugFound(4);
+
                 }
+                return res3.getResponse();
             } else if (res3.equals(res1) && res3.equals(res4)) {
-                if (res3.equals(res2) || res2 == null) {
-                    return res3.getResponse();
-                } else {
+                if (!res3.equals(res2) && res2 != null) {
                     rmBugFound(2);
+
                 }
+                return res3.getResponse();
             } else if (res3.equals(res2) && res3.equals(res4)) {
-                if (res3.equals(res1) || res1 == null) {
-                    return res3.getResponse();
-                } else {
+                if (!res3.equals(res1) && res1 != null) {
                     rmBugFound(1);
                 }
+                return res3.getResponse();
             } else if (res1 == null && res2 == null && res4 == null) {
                 return res3.getResponse();
             } else {
-                rmBugFound(3);
+//                rmBugFound(3);
             }
         }
+
         if (res4 == null) {
             rmDown(4);
         } else {
             Rm4NoResponseCount = 0;
             if (res4.equals(res1) && res4.equals(res2)) {
-                if (res4.equals(res3) || res3 == null) {
-                    return res4.getResponse();
-                } else {
+                if (!res4.equals(res3) && res3 != null) {
                     rmBugFound(3);
                 }
+                return res4.getResponse();
             } else if (res4.equals(res1) && res4.equals(res3)) {
-                if (res4.equals(res2) || res2 == null) {
-                    return res4.getResponse();
-                } else {
+                if (!res4.equals(res2) && res2 != null) {
                     rmBugFound(2);
                 }
+                return res4.getResponse();
             } else if (res4.equals(res2) && res4.equals(res3)) {
-                if (res4.equals(res1) || res1 == null) {
-                    return res4.getResponse();
-                } else {
+                if (!res4.equals(res1) && res1 != null) {
                     rmBugFound(1);
                 }
+                return res4.getResponse();
             } else if (res1 == null && res2 == null && res3 == null) {
                 return res4.getResponse();
             } else {
-                rmBugFound(4);
+//                rmBugFound(4);
             }
         }
 
@@ -403,7 +401,6 @@ public class Frontend implements FEInterface {
         System.out.println("FE rmDown ---> RM3 - noResponse:" + Rm3NoResponseCount);
         System.out.println("FE rmDown ---> RM4 - noResponse:" + Rm4NoResponseCount);
 
-        return;
     }
 
     private void setDynamicTimout() {
@@ -440,6 +437,10 @@ public class Frontend implements FEInterface {
 
     @Override
     public void informRmHasBug(int RmNumber) {
+
+        MyRequest errorMessage = new MyRequest(RmNumber, "1");
+
+        sendUnicastToSequencer(errorMessage);
 
         System.out.println( ANSI_RED_BACKGROUND + "FE is informing RmHasBug>>>RM" + RmNumber + " has a bug" + ANSI_RESET);
 

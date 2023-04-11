@@ -1,6 +1,6 @@
 package RM4;
 
-import com.web.webcontroller.implementation.MovieManagement;
+import RM4.webcontroller.implementation.MovieManagement;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

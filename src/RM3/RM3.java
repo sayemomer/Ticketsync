@@ -17,7 +17,7 @@ public class RM3 {
     public static ConcurrentHashMap<Integer, Message> message_list = new ConcurrentHashMap<>();
     public static Queue<Message> message_q = new ConcurrentLinkedQueue<Message>();
     private static boolean serversFlag = true;
-    private static boolean BugFlag = true;
+    private static boolean BugFlag = false;
 
     public static void main(String[] args) throws Exception {
         Run();
@@ -117,15 +117,19 @@ public class RM3 {
                     update_message_list(parts[1]);
                 } else if (parts[2].equalsIgnoreCase("11")) {
                     Message message = message_obj_create(data);
-                    BugFlag = false;
                     System.out.println("Rm1 has bug:" + message.toString());
                 } else if (parts[2].equalsIgnoreCase("12")) {
                     Message message = message_obj_create(data);
-                    System.out.println("Rm1 has bug:" + message.toString());
+                    System.out.println("Rm2 has bug:" + message.toString());
                 } else if (parts[2].equalsIgnoreCase("13")) {
+                    BugFlag = true;
                     Message message = message_obj_create(data);
-                    System.out.println("Rm1 has bug:" + message.toString());
-                } else if (parts[2].equalsIgnoreCase("21")) {
+                    System.out.println("Rm3 has bug:" + message.toString());
+                } else if (parts[2].equalsIgnoreCase("14")) {
+                    Message message = message_obj_create(data);
+                    System.out.println("Rm4 has bug:" + message.toString());
+                }
+                else if (parts[2].equalsIgnoreCase("21")) {
                     Runnable crash_task = () -> {
                         try {
 
@@ -258,7 +262,7 @@ public class RM3 {
                     Message data = itr.next();
                     //when the servers are down serversFlag is False therefore, no execution untill all servers are up.
                     if (data.sequenceId == lastSequenceID && serversFlag) {
-                        if (data.userID.equalsIgnoreCase(Bug_ID) && BugFlag == true) {
+                        if ( BugFlag == true) {
 //                            if (bug_counter == 0)
                             System.out.println("RM1 is executing message request. Detail:" + data);
                             requestToServers(data);
@@ -268,7 +272,7 @@ public class RM3 {
                                     data.oldEventType, data.bookingCapacity);
 //                            bug_counter += 1;
                             lastSequenceID += 1;
-                            messsageToFront(bug_message.toString(), data.FrontIpAddress);
+//                            messsageToFront(bug_message.toString(), data.FrontIpAddress);
                             message_q.poll();
                         } else {
                             System.out.println("RM1 is executing message request. Detail:" + data);

@@ -12,12 +12,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class RM4 {
     private static final String Bug_ID = "MTLM8888";
     private static final String Crash_ID = "MTLM9999";
+
+    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+    public static final String ANSI_RESET = "\u001B[0m";
     public static int lastSequenceID = 1;
     public static int bug_counter = 0;
     public static ConcurrentHashMap<Integer, Message> message_list = new ConcurrentHashMap<>();
     public static Queue<Message> message_q = new ConcurrentLinkedQueue<Message>();
     private static boolean serversFlag = true;
-    private static boolean BugFlag = true;
+    private static boolean BugFlag = false;
 
     public static void main(String[] args) throws Exception {
         Run();
@@ -117,15 +120,20 @@ public class RM4 {
                     update_message_list(parts[1]);
                 } else if (parts[2].equalsIgnoreCase("11")) {
                     Message message = message_obj_create(data);
-                    BugFlag = false;
                     System.out.println("Rm1 has bug:" + message.toString());
                 } else if (parts[2].equalsIgnoreCase("12")) {
                     Message message = message_obj_create(data);
-                    System.out.println("Rm1 has bug:" + message.toString());
+                    System.out.println("Rm2 has bug:" + message.toString());
                 } else if (parts[2].equalsIgnoreCase("13")) {
                     Message message = message_obj_create(data);
-                    System.out.println("Rm1 has bug:" + message.toString());
-                } else if (parts[2].equalsIgnoreCase("21")) {
+                    System.out.println("Rm3 has bug:" + message.toString());
+                } else if (parts[2].equalsIgnoreCase("14")) {
+                    BugFlag = true;
+                    Message message = message_obj_create(data);
+                    System.out.println("Rm4 has bug:" + message.toString());
+                    System.out.println(ANSI_RED_BACKGROUND +"RM4 is terminated" + ANSI_RESET);
+                }
+                else if (parts[2].equalsIgnoreCase("21")) {
                     Runnable crash_task = () -> {
                         try {
 
@@ -258,17 +266,17 @@ public class RM4 {
                     Message data = itr.next();
                     //when the servers are down serversFlag is False therefore, no execution untill all servers are up.
                     if (data.sequenceId == lastSequenceID && serversFlag) {
-                        if (data.userID.equalsIgnoreCase(Bug_ID) && BugFlag == true) {
+                        if (BugFlag == true) {
 //                            if (bug_counter == 0)
-                            System.out.println("RM1 is executing message request. Detail:" + data);
-                            requestToServers(data);
+                            System.out.println(ANSI_RED_BACKGROUND +"RM4 is terminated" + ANSI_RESET);
+//                            requestToServers(data);
                             Message bug_message = new Message(data.sequenceId, "Null", "RM1",
                                     data.Function, data.userID, data.newEventID,
                                     data.newEventType, data.oldEventID,
                                     data.oldEventType, data.bookingCapacity);
 //                            bug_counter += 1;
                             lastSequenceID += 1;
-                            messsageToFront(bug_message.toString(), data.FrontIpAddress);
+//                            messsageToFront(bug_message.toString(), data.FrontIpAddress);
                             message_q.poll();
                         } else {
                             System.out.println("RM1 is executing message request. Detail:" + data);
