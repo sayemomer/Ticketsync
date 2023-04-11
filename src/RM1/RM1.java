@@ -10,6 +10,10 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import RM4.Server4;
+
+import RM1.Server;
+
 public class RM1 {
     private static final String Bug_ID = "MTLM8888";
     private static final String Crash_ID = "MTLM9999";
@@ -141,39 +145,11 @@ public class RM1 {
 
                             System.out.println("RM1 is going to shutdown");
 
-                            //TODO: shutdown all servers
-//                            //suspend the execution of messages untill all servers are up. (serversFlag=false)
-//                            serversFlag = false;
-//                            //reboot Monteal Server
-//                            Registry montreal_registry = LocateRegistry.getRegistry(9992);
-//                            EventManagementInterface montreal_obj = (EventManagementInterface) montreal_registry.lookup("ServerClass");
-//                            montreal_obj.shutDown();
-//                            System.out.println("RM1 shutdown Montreal Server");
-//
-//                            //reboot Quebec Server
-//                            Registry quebec_registry = LocateRegistry.getRegistry(9991);
-//                            EventManagementInterface quebec_obj = (EventManagementInterface) quebec_registry.lookup("ServerClass");
-//                            quebec_obj.shutDown();
-//                            System.out.println("RM1 shutdown Quebec Server");
-//
-//                            //reboot Sherbrooke Server
-//                            Registry sherbrook_registry = LocateRegistry.getRegistry(9993);
-//                            EventManagementInterface sherbrook_obj = (EventManagementInterface) sherbrook_registry.lookup("ServerClass");
-//                            sherbrook_obj.shutDown();
-//                            System.out.println("RM1 shutdown Sherbrooke Server");
-//
-//                            //running all servers
-//                            Montreal.main(new String[0]);
-//                            Thread.sleep(500);
-//                            Quebec.main(new String[0]);
-//                            Thread.sleep(500);
-//                            Sherbrooke.main(new String[0]);
-//
-//                            //wait untill are servers are up
-//                            Thread.sleep(5000);
-//
-//                            System.out.println("RM1 is reloading servers hashmap");
-//                            reloadServers();
+                            Server.main(new String[0]);
+                            Thread.sleep(500);
+
+                            System.out.println("RM1 is reloading servers hashmap");
+                            reloadServers();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -302,6 +278,7 @@ public class RM1 {
                             System.out.println(message.toString());
                             messsageToFront(message.toString(), data.FrontIpAddress);
                             message_q.poll();
+
                         }
 //                    message_q.remove(data);
 //                    itr.remove();

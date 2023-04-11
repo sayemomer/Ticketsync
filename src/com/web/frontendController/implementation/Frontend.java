@@ -208,6 +208,7 @@ public class Frontend implements FEInterface {
         System.out.println("FE finding Majority Response <--- RM3" + ((res3 != null) ? res3.getResponse() : "null"));
         System.out.println("FE finding Majority Response <--- RM4" + ((res4 != null) ? res4.getResponse() : "null"));
 
+
         if (res1 == null) {
             rmDown(1);
         } else {
@@ -448,6 +449,10 @@ public class Frontend implements FEInterface {
 
     @Override
     public void informRmIsDown(int RmNumber) {
+
+        MyRequest errorMessage = new MyRequest(RmNumber, "2");
+
+        sendUnicastToSequencer(errorMessage);
 
         System.out.println( ANSI_RED_BACKGROUND + "FE is informing RmIsDown>>>RM" + RmNumber + " is down" + ANSI_RESET);
 

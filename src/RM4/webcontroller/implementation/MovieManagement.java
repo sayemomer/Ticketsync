@@ -96,7 +96,7 @@ public class MovieManagement  implements ControllerInterface {
 //                } catch (IOException e) {
 //                    e.printStackTrace();
 //                }
-                return CommonOutput.addMovieOutput(false, CommonOutput.addMovie_success_added);
+                return CommonOutput.addMovieOutput(false, null);
             }
         } else {
             response = "Failed: Cannot Add Show to servers other than " + serverName;
