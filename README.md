@@ -1,1 +1,1 @@
-# dmtbs-project
+# A fault-tolerant distributed system architecture employing Webservice for client-server interaction, a sequencer for request ordering, and multiple server replicas managed by replica managers to ensure system consistency and reliability through UDP unicast and multicast communications.
